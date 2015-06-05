@@ -2,7 +2,6 @@ FROM       ubuntu:14.04
 MAINTAINER BehanceRE <qa-behance@adobe.com>
 
 ENV     SHELL /bin/bash
-VOLUME  ["/data"]
 WORKDIR "/data"
 
 RUN apt-get install curl python2.7 -y
