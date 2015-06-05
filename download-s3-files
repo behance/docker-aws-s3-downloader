@@ -36,26 +36,28 @@ FILES=(${USR_FILES//:/ })
 for file in "${FILES[@]}"; do
     PIECES=(${file//,/ })
 
-    S3FILE=$PIECES[0]
-    PERMS=$PIECES[1]
-    TARGET=$PIECES[2]
+    S3FILE=${PIECES[0]}
+    PERMS=${PIECES[1]}
+    TARGET=${PIECES[2]}
+
+    echo "${file}"
 
     if [ "${S3FILE}" == "" ]; then
-        echo "No S3 file given for target ${file}, skipping"
+        echo " ---> No S3 file given for target ${file}, skipping"
         continue
     fi
 
     if [ "${TARGET}" == "" ]; then
         TARGET="/data/${S3FILE}"
-        echo "No download path for target ${file}, assuming ${TARGET}"
+        echo " ---> No download path for ${file}, assuming ${TARGET}"
     fi
 
     CMD="aws s3 cp --region ${REGION} s3://${BUCKET}/${S3FILE} ${TARGET}"
-    echo "Executing: ${CMD}"
+    echo " ---> Executing: ${CMD}"
     eval $CMD
 
     if [ "${PERMS}" != "" ]; then
-        echo "Updating permissions ${TARGET}[${PERMS}]"
+        echo " ---> Updating permissions ${TARGET}[${PERMS}]"
         chmod ${PERMS} ${TARGET}
     fi
 done
