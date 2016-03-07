@@ -1,15 +1,17 @@
-FROM       ubuntu:14.04
+FROM       alpine:3.3
 MAINTAINER BehanceRE <qa-behance@adobe.com>
 
-ENV     SHELL /bin/bash
 WORKDIR "/data"
 
-RUN apt-get install curl python2.7 -y
+RUN apk update && \
+    apk add \
+      bash \
+      'python<3.0' \
+      'py-pip<8.2' \
+    && \
+    rm -rf /var/cache/apk/*
 
-ADD https://bootstrap.pypa.io/get-pip.py /get-pip.py
-RUN sudo python2.7 /get-pip.py
-
-RUN sudo pip install awscli
+RUN pip install awscli
 
 ADD download-s3-files /opt/behance/download-s3-files
 
